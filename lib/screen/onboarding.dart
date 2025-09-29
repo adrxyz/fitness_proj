@@ -1,3 +1,4 @@
+import 'package:fitness_proj/screen/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness_proj/model/onboarding_model.dart';
 import 'package:fitness_proj/widgets/color_constant.dart';
@@ -80,7 +81,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 40.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -89,7 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(pages.length, (index) => _buildPageIndicator(index)),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 15),
 
                   // Navigation Row (Skip/Next or Get Started)
                   Row(
@@ -118,50 +119,50 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         const SizedBox(width: 60), // Space placeholder for alignment
 
                       // NEXT / GET STARTED Button
-                      isLastPage
-                          ? ElevatedButton(
-                              onPressed: () {
-                                // TODO: Navigate to Home Screen
-                                print("Onboarding Finished!");
-                                // In a real app, you would navigate here:
-                                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeScreen()));
-                              },
-                              style: ElevatedButton.styleFrom(
+                        isLastPage
+                            ? ElevatedButton(
+                                onPressed: () {
+                                  // TODO: Navigate to Home Screen
+                                  print("Onboarding Finished!");
+                                
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AuthScreen()));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: kAccentGold,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                                ),
+                                child: const Text(
+                                  "Get Started",
+                                  style: TextStyle(
+                                    color: kNearBlack,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              )
+                            : FloatingActionButton(
+                                onPressed: () {
+                                  _pageController.nextPage(
+                                    duration: const Duration(milliseconds: 400),
+                                    curve: Curves.easeIn,
+                                  );
+                                },
                                 backgroundColor: kAccentGold,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 14),
+                                shape: const CircleBorder(),
+                                elevation: 4,
+                                child: const Icon(Icons.arrow_forward_ios_rounded, color: kNearBlack, size: 24),
                               ),
-                              child: const Text(
-                                "Get Started",
-                                style: TextStyle(
-                                  color: kNearBlack,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            )
-                          : FloatingActionButton(
-                              onPressed: () {
-                                _pageController.nextPage(
-                                  duration: const Duration(milliseconds: 400),
-                                  curve: Curves.easeIn,
-                                );
-                              },
-                              backgroundColor: kAccentGold,
-                              shape: const CircleBorder(),
-                              elevation: 4,
-                              child: const Icon(Icons.arrow_forward_ios_rounded, color: kNearBlack, size: 24),
-                            ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    }
   }
-}
