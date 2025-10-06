@@ -106,8 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TextField(
                     style: TextStyle(color: kOffWhite),
                     decoration: InputDecoration(
+                      // Opacity removed
                       hintText: 'Add your fierce comment...',
-                      hintStyle: TextStyle(color: kOffWhite.withOpacity(0.6)),
+                      hintStyle: TextStyle(color: kOffWhite), 
                       filled: true,
                       fillColor: kNearBlack, 
                       border: OutlineInputBorder(
@@ -161,14 +162,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(width: 8),
                     Text(
                       time,
-                      style: TextStyle(color: kOffWhite.withOpacity(0.6), fontSize: 11),
+                      // Opacity removed
+                      style: TextStyle(color: kOffWhite, fontSize: 11),
                     ),
                   ],
                 ),
                 SizedBox(height: 4),
                 Text(
                   comment,
-                  style: TextStyle(color: kOffWhite.withOpacity(0.9)),
+                  // Opacity removed
+                  style: TextStyle(color: kOffWhite),
                 ),
               ],
             ),
@@ -222,8 +225,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           maxLines: 5,
                           style: TextStyle(color: kOffWhite),
                           decoration: InputDecoration(
+                            // Opacity removed
                             hintText: 'What epic feat have you accomplished?',
-                            hintStyle: TextStyle(color: kOffWhite.withOpacity(0.6)),
+                            hintStyle: TextStyle(color: kOffWhite),
                             filled: true,
                             fillColor: kNearBlack,
                             border: OutlineInputBorder(
@@ -300,7 +304,8 @@ class _HomeScreenState extends State<HomeScreen> {
             shadows: [
               Shadow(
                 blurRadius: 5.0,
-                color: kPrimaryMaroon.withOpacity(0.5),
+                // Opacity removed
+                color: kPrimaryMaroon, 
                 offset: Offset(0, 0),
               ),
             ],
@@ -359,7 +364,8 @@ class _HomeScreenState extends State<HomeScreen> {
           border: Border.all(color: kPrimaryMaroon, width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: kPrimaryMaroon.withOpacity(0.3),
+              // Opacity removed
+              color: kPrimaryMaroon,
               blurRadius: 8,
               offset: Offset(0, 4),
             ),
@@ -416,7 +422,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Text(
             creator['specialty']!,
-            style: TextStyle(color: kOffWhite.withOpacity(0.6), fontSize: 10),
+            // Opacity removed
+            style: TextStyle(color: kOffWhite, fontSize: 10),
             overflow: TextOverflow.ellipsis,
           ),
         ],
@@ -435,7 +442,8 @@ class _HomeScreenState extends State<HomeScreen> {
           TextField(
             decoration: InputDecoration(
               hintText: 'Search the Shadows (e.g., Yoga, HIIT)',
-              hintStyle: TextStyle(color: kOffWhite.withOpacity(0.6)),
+              // Opacity removed
+              hintStyle: TextStyle(color: kOffWhite),
               prefixIcon: Icon(Icons.search, color: kAccentGold),
               filled: true,
               fillColor: kDarkGrey,
@@ -492,9 +500,10 @@ class _HomeScreenState extends State<HomeScreen> {
             fontWeight: isSelected || isClearChip ? FontWeight.bold : FontWeight.normal,
           )
         ),
+        // Opacity removed
         backgroundColor: isClearChip 
             ? kPrimaryMaroon 
-            : (isSelected ? kAccentGold : kDarkGrey.withOpacity(0.8)),
+            : (isSelected ? kAccentGold : kDarkGrey),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
           side: BorderSide(
@@ -526,7 +535,8 @@ class _HomeScreenState extends State<HomeScreen> {
           border: Border.all(color: kAccentGold, width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: kPrimaryMaroon.withOpacity(0.3),
+              // Opacity removed
+              color: kPrimaryMaroon,
               blurRadius: 8,
               offset: Offset(0, 4),
             ),
@@ -552,7 +562,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 4),
                   Text(
                     'Based on your last **HIIT** session, try the **"Shadow Sprints"** workout.',
-                    style: TextStyle(color: kOffWhite.withOpacity(0.9)),
+                    // Opacity removed
+                    style: TextStyle(color: kOffWhite),
                   ),
                 ],
               ),
@@ -570,8 +581,9 @@ class _HomeScreenState extends State<HomeScreen> {
       color: kDarkGrey,
       elevation: 5,
       shape: RoundedRectangleBorder(
+        // Opacity removed
         borderRadius: BorderRadius.circular(15),
-        side: BorderSide(color: kPrimaryMaroon.withOpacity(0.5), width: 1),
+        side: BorderSide(color: kPrimaryMaroon, width: 1),
       ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -600,7 +612,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Spacer(),
-                Icon(Icons.more_vert, color: kOffWhite.withOpacity(0.7)),
+                // Opacity removed
+                Icon(Icons.more_vert, color: kOffWhite),
               ],
             ),
             SizedBox(height: 10),
@@ -634,7 +647,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(height: 8),
                             Text(
                               'Image Unavailable: No Legend Found',
-                              style: TextStyle(color: kOffWhite.withOpacity(0.7), fontSize: 14),
+                              // Opacity removed
+                              style: TextStyle(color: kOffWhite, fontSize: 14),
                             ),
                           ],
                         ),
@@ -646,7 +660,8 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 10),
 
             // Likes and Comments Bar
-            Divider(color: kPrimaryMaroon.withOpacity(0.7)),
+            // Opacity removed
+            Divider(color: kPrimaryMaroon),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -695,7 +710,8 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(width: 5),
             Text(
               count > 0 ? count.toString() : label,
-              style: TextStyle(color: kOffWhite.withOpacity(0.8), fontSize: 12),
+              // Opacity removed
+              style: TextStyle(color: kOffWhite, fontSize: 12),
             ),
           ],
         ),
@@ -705,7 +721,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Redesigned Bottom Navigation Bar with CircularNotchedRectangle
   Widget _buildBottomNavigationBar() {
-    final Color bottomBarColor = kNearBlack.withOpacity(0.9);
+    // Opacity removed
+    final Color bottomBarColor = kNearBlack;
 
     return Container(
       // The outer container for the top border/shadow effect
@@ -713,11 +730,13 @@ class _HomeScreenState extends State<HomeScreen> {
         color: bottomBarColor, 
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)), 
         border: Border(
-          top: BorderSide(color: kPrimaryMaroon.withOpacity(0.7), width: 1.5), 
+          // Opacity removed
+          top: BorderSide(color: kPrimaryMaroon, width: 1.5), 
         ),
         boxShadow: [
           BoxShadow(
-            color: kPrimaryMaroon.withOpacity(0.4),
+            // Opacity removed
+            color: kPrimaryMaroon,
             blurRadius: 10,
             spreadRadius: 2,
           ),
@@ -758,13 +777,15 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Icon(
                 icon,
-                color: isSelected ? kAccentGold : kOffWhite.withOpacity(0.6),
+                // Opacity removed
+                color: isSelected ? kAccentGold : kOffWhite,
                 size: isSelected ? 30 : 26,
               ),
               Text(
                 label,
                 style: TextStyle(
-                  color: isSelected ? kAccentGold : kOffWhite.withOpacity(0.6),
+                  // Opacity removed
+                  color: isSelected ? kAccentGold : kOffWhite,
                   fontSize: 10,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),

@@ -64,7 +64,7 @@ class SignUpViewState extends State<SignUpView> {
             Text(
               'Your Fitness Goal (Optional)',
               style: TextStyle(
-                color: kPrimaryMaroon.withOpacity(0.8),
+                color: kPrimaryMaroon,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -81,9 +81,9 @@ class SignUpViewState extends State<SignUpView> {
                   label: Text(goal),
                   selected: isSelected,
                   selectedColor: kPrimaryMaroon,
-                  backgroundColor: kDarkGrey.withOpacity(0.7),
+                  backgroundColor: kDarkGrey,
                   labelStyle: TextStyle(
-                    color: isSelected ? kOffWhite : kOffWhite.withOpacity(0.7),
+                    color: isSelected ? kOffWhite : kOffWhite,
                     fontWeight: FontWeight.bold,
                   ),
                   onSelected: (bool selected) {

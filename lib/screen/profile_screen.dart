@@ -85,7 +85,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         Text(
           label,
-          style: TextStyle(color: kAccentGold.withOpacity(0.8), fontSize: 10),
+          style: TextStyle(color: kAccentGold, fontSize: 10),
         ),
       ],
     );
@@ -102,7 +102,7 @@ class ProfileScreen extends StatelessWidget {
           title,
           style: TextStyle(color: color ?? kOffWhite, fontWeight: FontWeight.w500),
         ),
-        trailing: Icon(Icons.arrow_forward_ios, color: color ?? kOffWhite.withOpacity(0.5), size: 16),
+        trailing: Icon(Icons.arrow_forward_ios, color: color ?? kOffWhite, size: 16),
         onTap: () {
           print('$title clicked');
           // Navigate to the respective setting screen

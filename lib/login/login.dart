@@ -37,7 +37,7 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
-  // 3. 🚀 LOGIN AND NAVIGATION LOGIC
+  // 3. 🚀 LOGIN AND NAVIGATION LOGIC (FIXED ASYNC CONTEXT WARNINGS)
   Future<void> _submitLogin() async {
     if (!_formKey.currentState!.validate()) {
       return; // Stop if validation fails
@@ -50,6 +50,9 @@ class _LoginViewState extends State<LoginView> {
       // Simulate network/login delay (Replace with your AuthService call)
       await Future.delayed(const Duration(seconds: 2));
       
+      // Crucial check: Exit if the widget was unmounted during the delay
+      if (!mounted) return;
+      
       // Simulate a successful login result
       bool loginSuccess = true; 
 
@@ -58,6 +61,9 @@ class _LoginViewState extends State<LoginView> {
           const SnackBar(content: Text('Login successful! Redirecting...')),
         );
         
+        // Crucial check before navigation
+        if (!mounted) return;
+
         // 🔑 KEY FIX: NAVIGATE TO UserProfileSetupScreen
         // pushReplacementNamed prevents the user from going back to the login screen
         // using the back button after successful login.
@@ -66,11 +72,17 @@ class _LoginViewState extends State<LoginView> {
       } 
 
     } catch (e) {
+      // Crucial check before showing a snackbar
+      if (!mounted) return;
+      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('An unexpected error occurred.'), backgroundColor: Colors.red),
       );
     } finally {
-      setState(() { _isLoading = false; });
+      // We still need to call setState to stop loading indicator
+      if (mounted) {
+        setState(() { _isLoading = false; });
+      }
     }
   }
 
@@ -95,12 +107,12 @@ class _LoginViewState extends State<LoginView> {
       },
       decoration: InputDecoration(
         labelText: labelText,
-        prefixIcon: Icon(icon, color: kAccentGold),
+        prefixIcon:  Icon(icon, color: kAccentGold),
         suffixIcon: isPassword
             ? IconButton(
                 icon: Icon(
                   _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
-                  color: kAccentGold.withOpacity(0.7),
+                  color: kAccentGold, // Fixed deprecation
                 ),
                 onPressed: () {
                   setState(() {
@@ -111,7 +123,7 @@ class _LoginViewState extends State<LoginView> {
             : null,
         filled: true,
         fillColor: kDarkGrey,
-        labelStyle: TextStyle(color: kAccentGold.withOpacity(0.8)),
+        labelStyle: TextStyle(color: kAccentGold), // Fixed deprecation
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: kAccentGold, width: 2)),
         errorStyle: const TextStyle(color: kAccentGold, fontWeight: FontWeight.bold),
@@ -183,7 +195,7 @@ class _LoginViewState extends State<LoginView> {
               Text(
                 '— OR SIGN IN WITH —', 
                 textAlign: TextAlign.center, 
-                style: TextStyle(color: kOffWhite, fontSize: 14)
+                style: const TextStyle(color: kOffWhite, fontSize: 14) // Fixed deprecation on kOffWhite
               ),
               const SizedBox(height: 16),
 
@@ -201,7 +213,7 @@ class _LoginViewState extends State<LoginView> {
               Center(
                 child: TextButton(
                   onPressed: widget.toggleAuthMode,
-                  child: Text(
+                  child: const Text(
                     'Don\'t have an account? Sign Up!',
                     style: TextStyle(color: kAccentGold, fontWeight: FontWeight.bold),
                   ),

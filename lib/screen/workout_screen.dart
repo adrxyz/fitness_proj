@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fitness_proj/widgets/color_constant.dart';
+import 'package:fitness_proj/model/exercise.dart'; // NEW IMPORT
+import 'package:fitness_proj/service/workout_sevice.dart'; // NEW IMPORT
 
 // Placeholder for the live workout screen (to navigate to when "START" is pressed)
 class LiveWorkoutScreen extends StatelessWidget {
@@ -29,40 +31,26 @@ class WorkoutScreen extends StatefulWidget {
 }
 
 class _WorkoutScreenState extends State<WorkoutScreen> {
-  // Mock Data reflecting the scheduled workout view
-  String _currentWorkoutTitle = "TUESDAY'S WORKOUT";
-  String _workoutType = "Full Body";
-  String _workoutWeek = "Week 1/5 - Foundations";
+  // Initialize the service
+  final WorkoutService _workoutService = WorkoutService();
 
-  final List<Map<String, dynamic>> _currentExercises = [
-    {
-      'name': 'Smith Machine Squat',
-      'image': 'assets/images/smith_machine_squat.jpg', // Placeholder asset
-      'sets_reps': '4 sets x 6-8 reps x 50 lb',
-      'isCompleted': false,
-    },
-    {
-      'name': 'Barbell Good Morning',
-      'image': 'assets/images/barbell_good_morning.jpg', // Placeholder asset
-      'sets_reps': '3 sets x 10 reps x 75 lb',
-      'isCompleted': false,
-    },
-    {
-      'name': 'Dumbbell Bench Press',
-      'image': 'assets/images/db_bench_press.jpg', // Placeholder asset
-      'sets_reps': '4 sets x 8 reps x 30 lb',
-      'isCompleted': false,
-    },
-    {
-      'name': 'Seated Cable Row',
-      'image': 'assets/images/cable_row.jpg', // Placeholder asset
-      'sets_reps': '3 sets x 12 reps',
-      'isCompleted': false,
-    },
-  ];
+  // Data now fetched from the service (or a state management solution later)
+  late String _currentWorkoutTitle;
+  late String _workoutType;
+  late String _workoutWeek;
+  late List<Exercise> _currentExercises; // CHANGED TYPE
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize data using the service
+    _currentWorkoutTitle = _workoutService.getCurrentWorkoutTitle();
+    _workoutType = _workoutService.getWorkoutType();
+    _workoutWeek = _workoutService.getWorkoutWeek();
+    _currentExercises = _workoutService.getCurrentWorkout(); // Data is now a list of Exercise objects
+  }
 
   void _startWorkout() {
-    // Navigate to the live workout execution screen
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const LiveWorkoutScreen(),
@@ -72,7 +60,6 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
 
   void _editWorkout() {
     print("Editing the current workout sequence.");
-    // Implementation for a bottom sheet or new page to reorder/edit exercises
   }
 
   @override
@@ -97,7 +84,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       body: Column(
         children: [
           // 1. Top Filters and Calendar
-          _buildFiltersAndCalendar(),
+          _buildFiltersAndCalendar(), // Method call is here
 
           // 2. Workout Header Card (TUESDAY'S WORKOUT)
           _buildWorkoutHeaderCard(),
@@ -108,7 +95,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
               itemCount: _currentExercises.length,
               itemBuilder: (context, index) {
-                return _buildExerciseCard(_currentExercises[index]);
+                return _buildExerciseCard(_currentExercises[index]); // Pass Exercise object
               },
             ),
           ),
@@ -120,8 +107,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     );
   }
 
-  // --- NEW WIDGET BUILDERS ---
+  // --- WIDGET BUILDERS ---
 
+  // RE-INSERTED METHOD: _buildFiltersAndCalendar
   Widget _buildFiltersAndCalendar() {
     // Mimics the filter dropdowns and calendar dates from the image
     return Padding(
@@ -150,7 +138,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
               
               return Column(
                 children: [
-                  Text(day, style: TextStyle(color: isToday ? kAccentGold : kOffWhite.withOpacity(0.6), fontSize: 13)),
+                  Text(day, style: TextStyle(color: isToday ? kAccentGold : kOffWhite, fontSize: 13)), // REMOVED .withOpacity(0.6)
                   const SizedBox(height: 4),
                   Container(
                     width: 30,
@@ -185,23 +173,25 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       ),
     );
   }
-
+  
+  // RE-INSERTED METHOD: _buildDropdownFilter
   Widget _buildDropdownFilter(String label, IconData icon) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: kDarkGrey.withOpacity(0.5),
+        color: kDarkGrey, // REMOVED .withOpacity(0.5)
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         children: [
-          Text(label, style: TextStyle(color: kOffWhite.withOpacity(0.8), fontSize: 13)),
-          Icon(icon, color: kOffWhite.withOpacity(0.8), size: 18),
+          Text(label, style: TextStyle(color: kOffWhite, fontSize: 13)), // REMOVED .withOpacity(0.8)
+          Icon(icon, color: kOffWhite, size: 18), // REMOVED .withOpacity(0.8)
         ],
       ),
     );
   }
 
+  // RE-INSERTED METHOD: _buildWorkoutHeaderCard
   Widget _buildWorkoutHeaderCard() {
     return Container(
       width: double.infinity,
@@ -218,7 +208,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           // Week/Foundation Text
           Text(
             _workoutWeek,
-            style: TextStyle(color: kPrimaryMaroon.withOpacity(0.9), fontSize: 12, fontWeight: FontWeight.bold),
+            style: TextStyle(color: kPrimaryMaroon, fontSize: 12, fontWeight: FontWeight.bold), // REMOVED .withOpacity(0.9)
           ),
           const SizedBox(height: 5),
 
@@ -238,7 +228,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
           ),
           Text(
             _workoutType,
-            style: TextStyle(color: kOffWhite.withOpacity(0.7), fontSize: 16),
+            style: TextStyle(color: kOffWhite, fontSize: 16), // REMOVED .withOpacity(0.7)
           ),
           const Divider(color: kPrimaryMaroon, height: 20),
 
@@ -256,6 +246,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     );
   }
 
+  // RE-INSERTED METHOD: _buildStatDetail
   Widget _buildStatDetail(String value, String label, IconData icon) {
     return Row(
       children: [
@@ -270,7 +261,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
               ),
               TextSpan(
                 text: ' $label',
-                style: TextStyle(color: kOffWhite.withOpacity(0.7), fontSize: 14),
+                style: TextStyle(color: kOffWhite, fontSize: 14), // REMOVED .withOpacity(0.7)
               ),
             ],
           ),
@@ -278,9 +269,9 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       ],
     );
   }
-
-  Widget _buildExerciseCard(Map<String, dynamic> exercise) {
-    // The main workout preview card, like the Smith Machine Squat example
+  
+  // MODIFIED: Takes an Exercise object instead of a Map
+  Widget _buildExerciseCard(Exercise exercise) {
     return Container(
       margin: const EdgeInsets.only(bottom: 15.0),
       decoration: BoxDecoration(
@@ -288,7 +279,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
-            color: kNearBlack.withOpacity(0.3),
+            color: kNearBlack, // REMOVED .withOpacity(0.3)
             blurRadius: 5,
             offset: const Offset(0, 3),
           ),
@@ -303,18 +294,17 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
               ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
                 child: Image.asset(
-                  exercise['image'], 
+                  exercise.image, // Use the object property
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: 200,
-                  // Fallback for missing asset
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       height: 200,
                       color: kNearBlack,
                       child: Center(child: Text(
                         'Video Unavailable', 
-                        style: TextStyle(color: kPrimaryMaroon.withOpacity(0.7))
+                        style: TextStyle(color: kPrimaryMaroon) // REMOVED .withOpacity(0.7)
                       )),
                     );
                   },
@@ -328,11 +318,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.7),
+                    color: Colors.black, // REMOVED .withOpacity(0.7)
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    exercise['sets_reps'],
+                    exercise.setsReps, // Use the object property
                     style: const TextStyle(color: kOffWhite, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -350,12 +340,12 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      exercise['name'],
+                      exercise.name, // Use the object property
                       style: const TextStyle(color: kAccentGold, fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Target: Legs, Glutes', // Static for this example
-                      style: TextStyle(color: kOffWhite.withOpacity(0.7), fontSize: 12),
+                      'Target: ${exercise.targetMuscles}', // Use the object property
+                      style: TextStyle(color: kOffWhite, fontSize: 12), // REMOVED .withOpacity(0.7)
                     ),
                   ],
                 ),
@@ -368,6 +358,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
     );
   }
 
+  // RE-INSERTED METHOD: _buildStartButton
   Widget _buildStartButton() {
     // Styled to look like the large yellow button in the image
     return Padding(
@@ -382,7 +373,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             side: const BorderSide(color: kPrimaryMaroon, width: 2) // Added a maroon border for definition
           ),
           elevation: 10,
-          shadowColor: kAccentGold.withOpacity(0.5),
+          shadowColor: kAccentGold, // REMOVED .withOpacity(0.5)
         ),
         child: const Text(
           'START WORKOUT',

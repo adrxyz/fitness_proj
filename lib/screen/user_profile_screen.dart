@@ -326,7 +326,7 @@ class _UserProfileSetupScreenState extends State<UserProfileSetupScreen> {
                       color: isSelected
                           ? kAccentGold
                           : (_preferencesValidated
-                                ? kOffWhite.withOpacity(0.5)
+                                ? kOffWhite
                                 : Theme.of(context).colorScheme.error),
                     ),
                   ),

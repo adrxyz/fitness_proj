@@ -91,13 +91,13 @@ class _MapScreenState extends State<MapScreen> {
                 children: [
                   const Icon(Icons.location_on, color: kPrimaryMaroon, size: 20),
                   const SizedBox(width: 5),
-                  Text(
+                  const Text( // Removed .withOpacity()
                     'Your location',
-                    style: TextStyle(color: kOffWhite.withOpacity(0.8), fontSize: 14),
+                    style: TextStyle(color: kOffWhite, fontSize: 14),
                   ),
-                  Icon(Icons.keyboard_arrow_down, color: kOffWhite.withOpacity(0.8)),
+                  const Icon(Icons.keyboard_arrow_down, color: kOffWhite),
                   const Spacer(),
-                  Icon(Icons.bookmark_border, color: kOffWhite.withOpacity(0.8)),
+                  const Icon(Icons.bookmark_border, color: kOffWhite),
                 ],
               ),
               const SizedBox(height: 10),
@@ -134,12 +134,12 @@ class _MapScreenState extends State<MapScreen> {
           height: 400, // Slightly taller map area
           margin: const EdgeInsets.symmetric(horizontal: 16.0),
           decoration: BoxDecoration(
-            color: kDarkGrey.withOpacity(0.5),
+            color: kDarkGrey,
             borderRadius: BorderRadius.circular(15),
             border: Border.all(color: kPrimaryMaroon, width: 2),
             boxShadow: [
               BoxShadow(
-                color: kPrimaryMaroon.withOpacity(0.3),
+                color: kPrimaryMaroon, // Removed .withOpacity(0.3)
                 blurRadius: 10,
               ),
             ],
@@ -155,7 +155,7 @@ class _MapScreenState extends State<MapScreen> {
                   width: double.infinity,
                   height: double.infinity,
                   colorBlendMode: BlendMode.darken, // Make it darker
-                  color: Colors.black.withOpacity(0.4),
+                // Removed .withOpacity(0.4)
                 ),
               ),
               Positioned(
@@ -166,8 +166,8 @@ class _MapScreenState extends State<MapScreen> {
                     print('Create new route');
                   },
                   backgroundColor: kAccentGold,
-                  icon: Icon(Icons.edit_location, color: kNearBlack),
-                  label: Text('Create Route', style: TextStyle(color: kNearBlack)),
+                  icon: const Icon(Icons.edit_location, color: kNearBlack),
+                  label: const Text('Create Route', style: TextStyle(color: kNearBlack)),
                 ),
               ),
               // Overlay icons on the right side
@@ -177,15 +177,15 @@ class _MapScreenState extends State<MapScreen> {
                 child: Column(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.layers, color: kOffWhite.withOpacity(0.8), size: 28),
+                      icon: const Icon(Icons.layers, color: kOffWhite, size: 28), // Removed .withOpacity(0.8)
                       onPressed: () {},
                     ),
                     IconButton(
-                      icon: Icon(Icons.terrain, color: kOffWhite.withOpacity(0.8), size: 28),
+                      icon: const Icon(Icons.terrain, color: kOffWhite, size: 28), // Removed .withOpacity(0.8)
                       onPressed: () {},
                     ),
                     IconButton(
-                      icon: Icon(Icons.threed_rotation, color: kOffWhite.withOpacity(0.8), size: 28),
+                      icon: const Icon(Icons.threed_rotation, color: kOffWhite, size: 28), // Removed .withOpacity(0.8)
                       onPressed: () {},
                     ),
                     // ... more map interaction icons
@@ -205,7 +205,7 @@ class _MapScreenState extends State<MapScreen> {
             alignment: Alignment.centerLeft,
             child: Text(
               '6 routes',
-              style: TextStyle(color: kOffWhite.withOpacity(0.8), fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(color: kOffWhite, fontSize: 16, fontWeight: FontWeight.bold), // Removed .withOpacity(0.8)
             ),
           ),
         ),
@@ -222,27 +222,27 @@ class _MapScreenState extends State<MapScreen> {
             value: selectedValue,
             hint: Chip(
               avatar: Icon(icon, color: kAccentGold, size: 18),
-              label: Text(label, style: TextStyle(color: kOffWhite, fontSize: 13)),
-              backgroundColor: kDarkGrey.withOpacity(0.8),
+              label: Text(label, style: const TextStyle(color: kOffWhite, fontSize: 13)),
+              backgroundColor: kDarkGrey, // Removed .withOpacity(0.8)
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
-                side: BorderSide(color: kPrimaryMaroon, width: 1.5),
+                side: const BorderSide(color: kPrimaryMaroon, width: 1.5),
               ),
             ),
             dropdownColor: kDarkGrey,
-            icon: Icon(Icons.arrow_drop_down, color: kAccentGold),
+            icon: const Icon(Icons.arrow_drop_down, color: kAccentGold),
             onChanged: (String? newValue) {
               onSelected(newValue);
             },
             items: [
               DropdownMenuItem<String>( // Option to clear selection
                 value: null,
-                child: Text('All $label', style: TextStyle(color: kOffWhite.withOpacity(0.7))),
+                child: Text('All $label', style: const TextStyle(color: kOffWhite)), // Removed .withOpacity(0.7)
               ),
               ...options.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value, style: TextStyle(color: kOffWhite)),
+                  child: Text(value, style: const TextStyle(color: kOffWhite)),
                 );
               }).toList(),
             ],
@@ -255,11 +255,11 @@ class _MapScreenState extends State<MapScreen> {
         padding: const EdgeInsets.only(right: 8.0),
         child: Chip(
           avatar: Icon(icon, color: kAccentGold, size: 18),
-          label: Text(label, style: TextStyle(color: kOffWhite, fontSize: 13)),
-          backgroundColor: kDarkGrey.withOpacity(0.8),
+          label: Text(label, style: const TextStyle(color: kOffWhite, fontSize: 13)),
+          backgroundColor: kDarkGrey, // Removed .withOpacity(0.8)
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: kPrimaryMaroon, width: 1.5),
+            side: const BorderSide(color: kPrimaryMaroon, width: 1.5),
           ),
         ),
       );
@@ -276,11 +276,11 @@ class _MapScreenState extends State<MapScreen> {
           color: kDarkGrey,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(color: kPrimaryMaroon, width: 1.5),
-          boxShadow: [
+          boxShadow: const [ // Made const since color is now opaque
             BoxShadow(
-              color: kPrimaryMaroon.withOpacity(0.3),
+              color: kPrimaryMaroon, // Removed .withOpacity(0.3)
               blurRadius: 8,
-              offset: const Offset(0, 4),
+              offset: Offset(0, 4),
             ),
           ],
         ),
@@ -310,23 +310,23 @@ class _MapScreenState extends State<MapScreen> {
                     children: [
                       const Icon(Icons.directions_bike, color: kAccentGold, size: 16),
                       const SizedBox(width: 5),
-                      Text(
+                      const Text(
                         'Easy',
                         style: TextStyle(color: Colors.greenAccent, fontSize: 12),
                       ),
                       const SizedBox(width: 10),
-                      Text(
+                      const Text(
                         '20.52 mi · 1,539 ft (1h 22m)',
-                        style: TextStyle(color: kOffWhite.withOpacity(0.7), fontSize: 12),
+                        style: TextStyle(color: kOffWhite, fontSize: 12), // Removed .withOpacity(0.7)
                       ),
                     ],
                   ),
                   const SizedBox(height: 5),
-                  Text(
+                  const Text(
                     'Calabasas, California, USA',
-                    style: TextStyle(color: kOffWhite.withOpacity(0.6), fontSize: 11),
+                    style: TextStyle(color: kOffWhite, fontSize: 11), // Removed .withOpacity(0.6)
                   ),
-                  Text(
+                  const Text(
                     'From your location',
                     style: TextStyle(color: kAccentGold, fontSize: 11),
                   ),
@@ -347,7 +347,7 @@ class _MapScreenState extends State<MapScreen> {
       decoration: BoxDecoration(
         color: kDarkGrey,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: kAccentGold.withOpacity(0.5), width: 1),
+        border: Border.all(color: kAccentGold, width: 1), // Removed .withOpacity(0.5)
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -364,7 +364,7 @@ class _MapScreenState extends State<MapScreen> {
           ),
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: kAccentGold,
               fontSize: 10,
               fontWeight: FontWeight.bold,

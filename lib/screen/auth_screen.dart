@@ -36,8 +36,8 @@ class _AuthScreenState extends State<AuthScreen> {
         labelText: labelText,
         prefixIcon: Icon(icon, color: kAccentGold),
         filled: true,
-        fillColor: kDarkGrey.withOpacity(0.7),
-        labelStyle: TextStyle(color: kAccentGold.withOpacity(0.8)),
+        fillColor: kDarkGrey,
+        labelStyle: TextStyle(color: kAccentGold),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
