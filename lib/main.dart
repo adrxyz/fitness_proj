@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'splash/splash_screen.dart';
 import 'screen/onboarding.dart';
 import 'package:fitness_proj/widgets/color_constant.dart';
+import 'package:fitness_proj/screen/user_profile_screen.dart';
 
 // The main entry point for the Flutter application.
 void main() {
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         // Navigate to the Onboarding Flow after the splash screen
         '/onboarding': (context) => OnboardingScreen(),
+        '/user-profile-setup': (context) => const UserProfileSetupScreen(),
       },
     );
   }

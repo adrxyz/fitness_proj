@@ -63,10 +63,10 @@ class _AuthScreenState extends State<AuthScreen> {
         decoration: BoxDecoration(
           color: kNearBlack,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: color.withOpacity(0.5)),
+          border: Border.all(color: color),
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.2),
+              color: color,
               blurRadius: 5,
             )
           ]
