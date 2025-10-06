@@ -24,8 +24,8 @@ class LoginView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              'Sign In',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: kOffWhite),
+              'Login',
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: kPrimaryMaroon),
             ),
             const SizedBox(height: 24),
 

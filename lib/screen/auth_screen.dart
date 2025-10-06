@@ -31,7 +31,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return TextField(
       keyboardType: keyboardType,
       obscureText: isPassword,
-      style: TextStyle(color: kOffWhite),
+      style: const TextStyle(color: kOffWhite),
       decoration: InputDecoration(
         labelText: labelText,
         prefixIcon: Icon(icon, color: kAccentGold),
@@ -79,6 +79,8 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // 1. SET BACKGROUND TO MAROON
+      backgroundColor: kPrimaryMaroon,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(32.0),
@@ -90,15 +92,16 @@ class _AuthScreenState extends State<AuthScreen> {
               const SizedBox(height: 8),
               Text(
                 _isLogin ? 'WELCOME BACK' : 'JOIN THE GYM',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w900,
-                  color: kOffWhite,
+                  // 2. SET TEXT COLOR TO YELLOW (kAccentGold)
+                  color: kAccentGold,
                   letterSpacing: 2,
                 ),
-              ),  
+              ),
               const SizedBox(height: 32),
-              
+
               // Animated Switcher between Login and Sign Up Cards
               AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),

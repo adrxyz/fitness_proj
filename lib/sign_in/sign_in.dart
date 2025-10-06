@@ -31,7 +31,7 @@ class SignUpViewState extends State<SignUpView> {
           children: [
             Text(
               'Create Account',
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: kOffWhite),
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: kPrimaryMaroon),
             ),
             const SizedBox(height: 24),
 
@@ -64,7 +64,7 @@ class SignUpViewState extends State<SignUpView> {
             Text(
               'Your Fitness Goal (Optional)',
               style: TextStyle(
-                color: kOffWhite.withOpacity(0.8),
+                color: kPrimaryMaroon.withOpacity(0.8),
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
