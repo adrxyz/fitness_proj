@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart'; // 🚨 1. IMPORT FIREBASE CORE
+import 'package:fitness_proj/firebase_options.dart'; // 🚨 2. IMPORT OPTIONS FILE (Required for configuration)
+
 import 'splash/splash_screen.dart';
 import 'screen/onboarding.dart';
 import 'package:fitness_proj/widgets/color_constant.dart';
 
 // The main entry point for the Flutter application.
-void main() {
+void main() async { // 🚨 3. MAKE main() ASYNCHRONOUS
+  // Ensure the widget binding is initialized before using plugins like Firebase
+  WidgetsFlutterBinding.ensureInitialized(); 
+
+  // 🚨 4. CALL FIREBASE INITIALIZATION
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform, // Uses the configuration based on the platform
+    );
+    print("Firebase initialized successfully.");
+  } catch (e) {
+    // Handle the initialization error (this is helpful for debugging)
+    print("FATAL ERROR: Failed to initialize Firebase: $e");
+    // Optionally, you could show a persistent error screen here instead of running the app.
+  }
+
   runApp(const MyApp());
 }
 
