@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'fitness-cb334.firebasestorage.app',
     measurementId: 'G-0H9HGBL887',
   );
+
 }

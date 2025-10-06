@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-// 🚨 Ensure you have this import for navigation
-// import 'package:fitness_proj/screens/user_profile_setup_screen.dart'; 
-import 'package:fitness_proj/widgets/color_constant.dart';
-// NOTE: I've removed the Firebase/AuthService imports to simplify the minimal fix
-// but in a real app, you would need them here.
+import 'package:firebase_auth/firebase_auth.dart'; // 🚨 Import for FirebaseAuthException
+// Ensure you have these imports pointing to the correct paths
+import 'package:fitness_proj/widgets/color_constant.dart'; 
+import 'package:fitness_proj/auth/auth_service.dart'; // 🔑 Import the new service
 
 // 1. CONVERTED TO STATEFULWIDGET
 class LoginView extends StatefulWidget {
@@ -27,6 +26,10 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  
+  // 🔑 NEW: Instantiate the Auth Service
+  final AuthService _authService = AuthService();
+  
   bool _isLoading = false;
   bool _isPasswordVisible = false;
 
@@ -37,7 +40,7 @@ class _LoginViewState extends State<LoginView> {
     super.dispose();
   }
 
-  // 3. 🚀 LOGIN AND NAVIGATION LOGIC (FIXED ASYNC CONTEXT WARNINGS)
+  // 3. 🚀 LOGIN AND NAVIGATION LOGIC (NOW CALLS AUTH SERVICE)
   Future<void> _submitLogin() async {
     if (!_formKey.currentState!.validate()) {
       return; // Stop if validation fails
@@ -45,34 +48,46 @@ class _LoginViewState extends State<LoginView> {
 
     setState(() { _isLoading = true; });
 
-    // ⚠️ PLACEHOLDER FOR ACTUAL AUTH SERVICE CALL
     try {
-      // Simulate network/login delay (Replace with your AuthService call)
-      await Future.delayed(const Duration(seconds: 2));
+      // 🔑 ACTUAL AUTH SERVICE CALL
+      final User? user = await _authService.signInWithEmailPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
       
       // Crucial check: Exit if the widget was unmounted during the delay
       if (!mounted) return;
       
-      // Simulate a successful login result
-      bool loginSuccess = true; 
-
-      if (loginSuccess) {
+      if (user != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login successful! Redirecting...')),
+          SnackBar(content: Text('Login successful! Welcome ${user.email}')),
         );
         
         // Crucial check before navigation
         if (!mounted) return;
 
-        // 🔑 KEY FIX: NAVIGATE TO UserProfileSetupScreen
-        // pushReplacementNamed prevents the user from going back to the login screen
-        // using the back button after successful login.
+        // 🔑 NAVIGATE TO UserProfileSetupScreen on success
         Navigator.of(context).pushReplacementNamed('/user-profile-setup');
-        
       } 
+    
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
 
+      String errorMessage = 'Login failed.';
+      
+      if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+        errorMessage = 'Invalid email or password.';
+      } else if (e.code == 'user-disabled') {
+        errorMessage = 'This account has been disabled.';
+      } else {
+        errorMessage = 'Error: ${e.message}';
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
+      );
     } catch (e) {
-      // Crucial check before showing a snackbar
+      // General Error Handling
       if (!mounted) return;
       
       ScaffoldMessenger.of(context).showSnackBar(
@@ -86,6 +101,34 @@ class _LoginViewState extends State<LoginView> {
     }
   }
 
+  // 🌐 Helper function for social logins
+  Future<void> _handleSocialLogin(Future<User?> Function() signInMethod, String provider) async {
+    setState(() { _isLoading = true; });
+    try {
+      await signInMethod();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Successfully signed in with $provider!')),
+      );
+      Navigator.of(context).pushReplacementNamed('/user-profile-setup');
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('$provider sign-in failed: ${e.message}'), backgroundColor: Colors.red),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred during $provider sign-in.'), backgroundColor: Colors.red),
+      );
+    } finally {
+      if (mounted) {
+        setState(() { _isLoading = false; });
+      }
+    }
+  }
+
+
   // Helper to apply styling from the parent widget to a TextFormField with validation
   Widget _buildValidatedTextField({
     required String labelText,
@@ -95,6 +138,7 @@ class _LoginViewState extends State<LoginView> {
     TextInputType keyboardType = TextInputType.text,
     String? Function(String?)? validator,
   }) {
+    // ... (This function remains largely the same, using the visibility state)
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
@@ -107,12 +151,12 @@ class _LoginViewState extends State<LoginView> {
       },
       decoration: InputDecoration(
         labelText: labelText,
-        prefixIcon:  Icon(icon, color: kAccentGold),
+        prefixIcon: Icon(icon, color: kAccentGold),
         suffixIcon: isPassword
             ? IconButton(
                 icon: Icon(
                   _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
-                  color: kAccentGold, // Fixed deprecation
+                  color: kAccentGold,
                 ),
                 onPressed: () {
                   setState(() {
@@ -123,7 +167,7 @@ class _LoginViewState extends State<LoginView> {
             : null,
         filled: true,
         fillColor: kDarkGrey,
-        labelStyle: TextStyle(color: kAccentGold), // Fixed deprecation
+        labelStyle: TextStyle(color: kAccentGold),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
         focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: kAccentGold, width: 2)),
         errorStyle: const TextStyle(color: kAccentGold, fontWeight: FontWeight.bold),
@@ -173,7 +217,7 @@ class _LoginViewState extends State<LoginView> {
 
               // Main Login Button
               ElevatedButton(
-                onPressed: _isLoading ? null : _submitLogin, // 🔑 Use the logic function
+                onPressed: _isLoading ? null : _submitLogin, // 🔑 Calls the real login logic
                 style: ElevatedButton.styleFrom(
                   backgroundColor: kPrimaryMaroon,
                   foregroundColor: kOffWhite,
@@ -195,16 +239,28 @@ class _LoginViewState extends State<LoginView> {
               Text(
                 '— OR SIGN IN WITH —', 
                 textAlign: TextAlign.center, 
-                style: const TextStyle(color: kOffWhite, fontSize: 14) // Fixed deprecation on kOffWhite
+                style: const TextStyle(color: kOffWhite, fontSize: 14)
               ),
               const SizedBox(height: 16),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  widget.buildSocialButton(context, 'Google', Icons.g_mobiledata_rounded, kOffWhite),
-                  widget.buildSocialButton(context, 'Apple', Icons.apple_rounded, kOffWhite),
-                  widget.buildSocialButton(context, 'Facebook', Icons.facebook_rounded, Colors.blue),
+                  // 🔑 Google Login (Now uses the _handleSocialLogin helper)
+                  InkWell(
+                    onTap: _isLoading ? null : () => _handleSocialLogin(_authService.signInWithGoogle, 'Google'),
+                    child: widget.buildSocialButton(context, 'Google', Icons.g_mobiledata_rounded, kOffWhite),
+                  ),
+                  // Apple (using a placeholder function for simplicity)
+                  InkWell(
+                    onTap: _isLoading ? null : () => _handleSocialLogin(() async => null, 'Apple'),
+                    child: widget.buildSocialButton(context, 'Apple', Icons.apple_rounded, kOffWhite),
+                  ),
+                  // Facebook (using a placeholder function for simplicity)
+                  InkWell(
+                    onTap: _isLoading ? null : () => _handleSocialLogin(() async => null, 'Facebook'),
+                    child: widget.buildSocialButton(context, 'Facebook', Icons.facebook_rounded, Colors.blue),
+                  ),
                 ],
               ),
               const SizedBox(height: 24),

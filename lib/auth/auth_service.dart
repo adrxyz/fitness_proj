@@ -1,55 +1,65 @@
-// services/auth_service.dart
+// File: lib/auth/auth_service.dart
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
+// Minimal AuthService for Email/Password Login and SignUp
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  // Error codes for a cleaner error handling in the UI
-  static const String weakPassword = 'weak-password';
-  static const String emailAlreadyInUse = 'email-already-in-use';
-
-  /// Registers a new user with Firebase Authentication and saves
-  /// additional profile data (full name, goal) to Firestore.
-  Future<User?> signUpWithEmailPassword({
+  // 📧 Email and Password Sign In
+  Future<User?> signInWithEmailPassword({
     required String email,
     required String password,
-    required String fullName,
-    String? fitnessGoal,
   }) async {
     try {
-      // 1. Create user in Firebase Authentication
-      final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      final UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-
-      final User? user = userCredential.user;
-
-      if (user != null) {
-        // 2. Save additional user data to Firestore
-        await _firestore.collection('users').doc(user.uid).set({
-          'uid': user.uid,
-          'email': email,
-          'fullName': fullName,
-          'fitnessGoal': fitnessGoal, // Can be null
-          'createdAt': FieldValue.serverTimestamp(),
-        });
-
-        // 3. Update the user's display name in Auth (optional, but good practice)
-        await user.updateDisplayName(fullName);
-
-        return user;
-      }
-      return null;
-    } on FirebaseAuthException catch (e) {
-      // Re-throw the exception so the UI can handle it
-      throw e;
+      return userCredential.user;
+    } on FirebaseAuthException {
+      // Re-throw the exception so the calling widget can handle the specific error codes
+      rethrow;
     } catch (e) {
-      // General error handling
-      print('Sign up error: $e');
+      // Re-throw any other unexpected exceptions
       rethrow;
     }
+  }
+
+  // 🔑 NEW: Email and Password Sign Up
+  /// Registers a new user with email and password.
+  Future<User?> signUpWithEmailPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // Returns the newly created User object on success
+      return userCredential.user;
+    } on FirebaseAuthException {
+      // Re-throw the exception so the SignUpView can catch and handle it
+      rethrow;
+    } catch (e) {
+      // Re-throw any other unexpected exceptions
+      rethrow;
+    }
+  }
+
+  // 🌐 Placeholder for Social Sign-In (replace with real logic later)
+  Future<User?> signInWithGoogle() async {
+    // Implement real Google Sign-In logic here (requires google_sign_in package)
+    throw FirebaseAuthException(
+      code: 'social-not-implemented',
+      message: 'Google Sign-In is a placeholder.',
+    );
+  }
+
+  // 🚪 NEW: Sign Out
+  /// Signs out the current user.
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
   }
 }
